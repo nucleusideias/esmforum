@@ -25,6 +25,13 @@ function cadastrar_pergunta(texto) {
 }
 
 function cadastrar_resposta(id_pergunta, texto) {
+
+  // Verifica se a pergunta existe
+  const perguntaExistente = bd.query('select * from perguntas where id_pergunta = ?', [id_pergunta]);
+  if (!perguntaExistente) {
+    return `Pergunta inexistente.`
+  }
+
   const params = [id_pergunta, texto];
   const result = bd.exec('INSERT INTO respostas (id_pergunta, texto) VALUES(?, ?) RETURNING id_resposta', params);
   return result.lastInsertRowid;
